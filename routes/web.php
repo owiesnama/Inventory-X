@@ -22,3 +22,7 @@ Route::resource('customers', App\Http\Controllers\CustomersController::class)->o
 
 
 Route::resource('customers', App\Http\Controllers\CustomersController::class)->only('index', 'store');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
