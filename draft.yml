@@ -1,0 +1,25 @@
+models:
+  Customers:
+    name: string:200
+    address: longtext
+    phone_number: string:200
+  Storages:
+    title: string:400
+    Address: longtext
+  Items:
+    name: string:200
+    price: string:200
+    cost: string:200
+    expire_date: nullable timestamp
+  Items Storage:
+    item_id: id foreign:items
+    storage_id: id foreign:storages
+controllers:
+  Customers:
+    index:
+      query: all
+      render: customers.index with:customers
+    store:
+      validate: name,address,phone_number
+      save: customer
+      redirect: customers.index

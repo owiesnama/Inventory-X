@@ -1,0 +1,25 @@
+created:
+    - app/Http/Controllers/CustomersController.php
+    - database/factories/CustomersFactory.php
+    - database/factories/StoragesFactory.php
+    - database/factories/ItemsFactory.php
+    - database/factories/ItemsStorageFactory.php
+    - database/migrations/2022_02_11_162610_create_customers_table.php
+    - database/migrations/2022_02_11_162611_create_storages_table.php
+    - database/migrations/2022_02_11_162612_create_items_table.php
+    - database/migrations/2022_02_11_162613_create_items_storages_table.php
+    - app/Models/Customers.php
+    - app/Models/Storages.php
+    - app/Models/Items.php
+    - 'app/Models/Items Storage.php'
+    - tests/Feature/Http/Controllers/CustomersControllerTest.php
+    - app/Http/Requests/CustomerStoreRequest.php
+    - resources/views/customers/index.blade.php
+updated:
+    - routes/web.php
+models:
+    User: { name: string, email: string, email_verified_at: 'datetime nullable', password: string, remember_token: 'string:100 nullable' }
+    Customers: { name: 'string:200', address: longtext, phone_number: 'string:200' }
+    Storages: { title: 'string:400', Address: longtext }
+    Items: { name: 'string:200', price: 'string:200', cost: 'string:200', expire_date: 'nullable timestamp' }
+    'Items Storage': { item_id: 'id foreign:items', storage_id: 'id foreign:storages' }
