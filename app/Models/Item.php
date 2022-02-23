@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Storages extends Model
+class Item extends Model
 {
     use HasFactory;
 
@@ -15,8 +15,10 @@ class Storages extends Model
      * @var array
      */
     protected $fillable = [
-        'title',
-        'Address',
+        'name',
+        'price',
+        'cost',
+        'expire_date',
     ];
 
     /**
@@ -26,5 +28,6 @@ class Storages extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'expire_date' => 'timestamp',
     ];
 }

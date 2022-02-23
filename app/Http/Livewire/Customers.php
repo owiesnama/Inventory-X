@@ -2,7 +2,8 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Customers as ModelsCustomers;
+use App\Models\Customer;
+
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 
@@ -20,7 +21,7 @@ class Customers extends Component
             
             
         ])->validate();
-        ModelsCustomers::create($validatedDate);
+        Customer::create($validatedDate);
         return back();
     }
 
@@ -28,14 +29,14 @@ class Customers extends Component
         public function delete($id)
         {
             
-            $item = ModelsCustomers::findOrFail($id)->delete();
+            $item = Customer::findOrFail($id)->delete();
             return back();
             
         }
 
     public function render()
     {
-        $customers = ModelsCustomers::all();
+        $customers = Customer::all();
         return view('livewire.customers', [
             'customers' => $customers,
         ]);

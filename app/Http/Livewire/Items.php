@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Items as ItemModel;
+use App\Models\Item;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 
@@ -22,7 +22,7 @@ class Items extends Component
             "expired_date" => "nullable",
             
         ])->validate();
-        ItemModel::create($validatedDate);
+        Item::create($validatedDate);
         return back();
     }
 
@@ -32,7 +32,7 @@ class Items extends Component
     public function delete($ItemID)
     {
         
-        $item = ItemModel::findOrFail($ItemID)->delete();
+        $item = Item::findOrFail($ItemID)->delete();
         return back();
         
     }
@@ -40,7 +40,7 @@ class Items extends Component
     
     public function render()
     {
-        $items = ItemModel::all();
+        $items = Item::all();
         return view('livewire.items', [
             'items' => $items,
         ]);
