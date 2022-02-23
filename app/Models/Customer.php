@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Items extends Model
+class Customer extends Model
 {
     use HasFactory;
 
@@ -16,9 +16,8 @@ class Items extends Model
      */
     protected $fillable = [
         'name',
-        'price',
-        'cost',
-        'expire_date',
+        'address',
+        'phone_number',
     ];
 
     /**
@@ -28,6 +27,5 @@ class Items extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'expire_date' => 'timestamp',
     ];
 }

@@ -26,3 +26,15 @@ Route::resource('customers', App\Http\Controllers\CustomersController::class)->o
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/items', function () {
+    return view('dashboard-items');
+})->name('items');
+
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/customers', function () {
+    return view('dashboard-customers');
+})->name('customers');
+Route::middleware(['auth:sanctum', 'verified'])->get('/storage', function () {
+    return view('dashboard-storage');
+})->name('storage');

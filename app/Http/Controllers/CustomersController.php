@@ -14,7 +14,7 @@ class CustomersController extends Controller
      */
     public function index(Request $request)
     {
-        $customers = Customer::all();
+        $customers = Customers::all();
 
         return view('customers.index', compact('customers'));
     }
@@ -23,9 +23,9 @@ class CustomersController extends Controller
      * @param \App\Http\Requests\CustomersStoreRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CustomersStoreRequest $request)
+    public function store(Request $request)
     {
-        $customer = Customer::create($request->validated());
+        $customer = Customers::create($request->validated());
 
         return redirect()->route('customers.index');
     }
