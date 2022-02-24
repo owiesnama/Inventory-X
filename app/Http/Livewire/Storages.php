@@ -5,39 +5,54 @@ namespace App\Http\Livewire;
 use App\Models\Storage;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Storages extends Component
 {
-    public $state = [];
+    use WithPagination;
+    public $isAddingNewItem = false;
+    public $isDeleting = false;
+    public $storage = [];
+    public $itemToDelete;
 
-    public function AddStorage()
-    {
-        $validatedDate = Validator::make($this->state, [
-            
-            'title' => "required",
-            "Address" => "required",
 
-        ])->validate();
-
-        Storage::create($validatedDate);
-        return back();
-    }
-
-    
-    // Delete
-    public function delete($ItemID)
+    public function store()
     {
         
-        $item = Storage::findOrFail($ItemID)->delete();
-        return back();
-        
+        $this->validate([
+            'storage.title' => "required",
+             "storage.Address" => "required",
+        ]);
+
+        Storage::create($this->storage);
+
+        $this->isAddingNewItem = false;
+
+        session()->flash('message', 'A new storage has been added');
     }
 
+
+    public function toggleAddingModal()
+    {
+        $this->isAddingNewItem = !$this->isAddingNewItem;
+    }
+
+    public function confirmingDeletion($item)
+    {
+        $this->isDeleting = true;
+        $this->itemToDelete = $item;
+    }
+
+    public function destroy()
+    {
+        Storage::find($this->itemToDelete['id'])->delete();
+        $this->isDeleting = false;
+    }
     public function render()
     {
-        $storage = Storage::all();
+        
         return view('livewire.storage', [
-            'storage' => $storage,
+            'storages' => Storage::paginate(10),
         ]);
     }
 }

@@ -61,6 +61,7 @@
             {{ $items->links() }}
         </div>
     </div>
+    
     <form method="post" wire:submit.prevent="destroy()">
         <x-jet-confirmation-modal wire:model="isDeleting">
             <x-slot name="title">

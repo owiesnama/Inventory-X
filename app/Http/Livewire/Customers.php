@@ -6,39 +6,54 @@ use App\Models\Customer;
 
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Customers extends Component
 {
-    public $state = [];
-    public function AddCustomer()
+    use WithPagination;
+    public $isAddingNewItem = false;
+    public $isDeleting = false;
+    public $customer = [];
+    public $itemToDelete;
+
+    public function store()
     {
-      
-        $validatedDate = Validator::make($this->state, [
-            
-            'name' => "required",
-            "address" => "required",
-            "phone_number" => "required",
-            
-            
-        ])->validate();
-        Customer::create($validatedDate);
-        return back();
+
+        $this->validate([
+            'customer.name' => "required",
+            "customer.address" => "required",
+            "customer.phone_number" => "required",
+        ]);
+
+        Customer::create($this->customer);
+
+        $this->isAddingNewItem = false;
+
+        session()->flash('message', 'A new customer has been added');
+    }
+    public function toggleAddingModal()
+    {
+        $this->isAddingNewItem = !$this->isAddingNewItem;
+    }
+    public function confirmingDeletion($item)
+    {
+        $this->isDeleting = true;
+        $this->itemToDelete = $item;
+    }
+    public function destroy()
+    {
+        Customer::find($this->itemToDelete['id'])->delete();
+        $this->isDeleting = false;
     }
 
-        // Delete
-        public function delete($id)
-        {
-            
-            $item = Customer::findOrFail($id)->delete();
-            return back();
-            
-        }
+
+   
 
     public function render()
     {
-        $customers = Customer::all();
+        
         return view('livewire.customers', [
-            'customers' => $customers,
+            'customers' => Customer::paginate(10),
         ]);
     }
 }

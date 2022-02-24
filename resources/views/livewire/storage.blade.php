@@ -1,100 +1,113 @@
-<div>
-    <!-- Storage Form -->
-    <div class="w-full max-w-xs">
-      <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" wire:submit.prevent='AddStorage'>
-        <div class="mb-4">
-          <label class="block text-gray-700 text-sm font-bold mb-2" for="item">
-            Title
-          </label>
-          <input
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none "
-            id="item" type="text" placeholder="Name" wire:model.debounce="state.title">
-        </div>
-        <div class="mb-4">
-          <label class="block text-gray-700 text-sm font-bold mb-2" for="price">
-            Address
-          </label>
-          <input
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none "
-            id="price" type="text" placeholder="Address" wire:model.debounce="state.Address">
-        </div>
-        
-  
-  
-  
-        <div class="flex items-center justify-between">
-          <button
-            class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="submit">
-            ADD
-          </button>
-  
-        </div>
-      </form>
-  
-    </div>
-  
-  
-    <!-- Storage Table -->
-  
-    <div class="flex flex-col">
-      <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div class="inline-block py-2 min-w-full sm:px-6 lg:px-8">
-          <div class="overflow-hidden shadow-md sm:rounded-lg">
-            <table class="min-w-full">
-              <thead class="bg-gray-50 dark:bg-gray-700">
-                <tr>
-                  <th scope="col"
-                    class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                    Title
-                  </th>
-                  <th scope="col"
-                    class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                    Address
-                  </th>
-              
-  
-                  <th scope="col" class="relative py-3 px-6">
-                    <span class="sr-only">Actions</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                @forelse ($storage as $item)
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                  <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {{ $item->title }}
-                  </td>
-                  <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
-                    {{ $item->Address }}
-                  </td>
-           
-                  <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                    <button class="text-blue-600 dark:text-blue-500 hover:underline"
-                      wire:click.prevent="delete({{ $item->id }})">Delete</button>
-                  </td>
-                </tr>
-  
-                @empty
-                <tr>
-                  <td>
-                    <p>There Is No Storage</p>
-                  </td>
-                </tr>
-                @endforelse
-  
-  
-  
-  
-              </tbody>
-            </table>
-          </div>
-        </div>
+<div class="flex flex-col">
+  <!-- new Table -->
+  <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+    <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+      @if (session()->has('message'))
+      @endif
+      <div class="mb-4 overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                Title</th>
+                <th scope="col"
+                class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                Address</th>
+              <th scope="col" class="relative px-6 py-3 text-right">
+                <button class="px-6 py-2 text-white bg-indigo-600 rounded hover:bg-indigo-900"
+                  wire:click="toggleAddingModal">New
+                  Storage</button>
+              </th>
+
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            @foreach ($storages as $storage)
+            <tr :wire:key="'storage-'.$storage->id">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="ml-4">
+                    <div class="text-sm font-medium text-gray-900">{{ $storage->title }}</div>
+                    
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">{{ $storage->Address }}</div>
+            </td>
+         
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full">
+                  Available </span>
+              </td>
+              <td class="px-6 py-4 space-x-4 text-sm font-medium text-right whitespace-nowrap">
+                <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                <a href="#" class="text-red-600 hover:text-red-900"
+                  wire:click="confirmingDeletion({{ $storage }})">Delete</a>
+              </td>
+            </tr>
+            @endforeach
+          </tbody>
+        </table>
       </div>
+      {{ $storages->links() }}
     </div>
-  
-    <!-- Storage Form Ends -->
-  
-  
-  
   </div>
+  <!-- End new Table -->
+
+
+
+  <!-- Storage modal form -->
+  <form wire:submit.prevent="store()" method="post">
+    <x-jet-dialog-modal wire:model="isAddingNewItem">
+      <x-slot name="title">
+        New Storage
+      </x-slot>
+      <x-slot name="content">
+        <div class="space-y-4">
+          <x-jet-validation-errors></x-jet-validation-errors>
+          <div class="space-y-1">
+            <x-jet-label for="name" value="{{ __('Name') }}" />
+            <x-jet-input id="name" class="block w-full mt-1" type="text" inputmode="numeric" wire:model="storage.title"
+              name="title" autofocus x-ref="name" autocomplete="one-time-code" />
+          </div>
+          <div class="space-y-1">
+            <x-jet-label for="address" value="{{ __('Address') }}" />
+            <x-jet-input id="address" class="block w-full mt-1" type="text" inputmode="numeric" wire:model="storage.Address"
+              name="Address" x-ref="name" />
+          </div>
+   
+        </div>
+      </x-slot>
+      <x-slot name="footer">
+        <button class="px-6 py-2 text-white bg-indigo-600 rounded hover:bg-indigo-900" type="submit">Save
+          Storage</button>
+        <button class="px-6 py-2 text-gray-600 rounded" wire:click="toggleAddingModal()" type="button">Cancel</button>
+      </x-slot>
+    </x-jet-dialog-modal>
+  </form>
+
+
+  <!-- End Storage modal form -->
+  <!-- Delete Model -->
+  <form method="post" wire:submit.prevent="destroy()">
+    <x-jet-confirmation-modal wire:model="isDeleting">
+        <x-slot name="title">
+            Are you sure you want to delete <strong>{{ optional($itemToDelete)['name'] }}</strong>
+        </x-slot>
+        <x-slot name="content">
+        </x-slot>
+        <x-slot name="footer">
+            <button class="px-6 py-2 text-white bg-red-600 rounded hover:bg-red-900" type="submit">Delete
+                Storage</button>
+            <button class="px-6 py-2 text-gray-600 rounded" wire:click="$set('isDeleting', false)"
+                type="button">Cancel</button>
+        </x-slot>
+    </x-jet-confirmation-modal>
+</form>
+
+  <!-- End Delete Model -->
+
+
+
+</div>
