@@ -27,9 +27,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/items', function () {
-    return view('dashboard-items');
-})->name('items');
+Route::view('/items','items.index')->middleware(['auth:sanctum', 'verified'])->name('items');
 
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/customers', function () {

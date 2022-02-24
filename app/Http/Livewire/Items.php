@@ -3,46 +3,54 @@
 namespace App\Http\Livewire;
 
 use App\Models\Item;
-use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Items extends Component
 {
-    public $state = [];
-    
-    // ADD Items
-    public function AddItem()
+    use WithPagination;
+    public $isAddingNewItem = false;
+    public $isDeleting = false;
+    public $item = [];
+    public $itemToDelete;
+
+    public function store()
     {
-      
-        $validatedDate = Validator::make($this->state, [
-            
-            'name' => "required",
-            "price" => "required",
-            "cost" => "required",
-            "expired_date" => "nullable",
-            
-        ])->validate();
-        Item::create($validatedDate);
-        return back();
+
+        $this->validate([
+            'item.name' => "required",
+            "item.price" => "required",
+            "item.cost" => "required",
+            "item.expired_date" => "nullable",
+        ]);
+
+        Item::create($this->item);
+
+        $this->isAddingNewItem = false;
+
+        session()->flash('message', 'A new item has been added');
     }
 
-    
-
-        // Delete
-    public function delete($ItemID)
+    public function toggleAddingModal()
     {
-        
-        $item = Item::findOrFail($ItemID)->delete();
-        return back();
-        
+        $this->isAddingNewItem = !$this->isAddingNewItem;
     }
 
-    
+    public function confirmingDeletion($item)
+    {
+        $this->isDeleting = true;
+        $this->itemToDelete = $item;
+    }
+
+    public function destroy()
+    {
+        Item::find($this->itemToDelete['id'])->delete();
+        $this->isDeleting = false;
+    }
     public function render()
     {
-        $items = Item::all();
         return view('livewire.items', [
-            'items' => $items,
+            'items' => Item::paginate(10),
         ]);
     }
 }
