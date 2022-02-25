@@ -15,7 +15,7 @@ class CreateItemsStoragesTable extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::create('items_storages', function (Blueprint $table) {
+        Schema::create('item_storage', function (Blueprint $table) {
             $table->id();
             $table->foreignId('item_id')->constrained();
             $table->foreignId('storage_id')->constrained();
