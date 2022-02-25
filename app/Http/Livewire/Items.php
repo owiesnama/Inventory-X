@@ -9,6 +9,8 @@ use Livewire\WithPagination;
 class Items extends Component
 {
     use WithPagination;
+    public $perPage = 10;
+    public $search = '';
     public $isAddingNewItem = false;
     public $isDeleting = false;
     public $item = [];
@@ -50,7 +52,7 @@ class Items extends Component
     public function render()
     {
         return view('livewire.items', [
-            'items' => Item::paginate(10),
+            'items' => Item::search($this->search)->paginate($this->perPage),
         ]);
     }
 }

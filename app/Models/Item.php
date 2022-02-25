@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Item extends Model
 {
     use HasFactory;
+    use Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -30,4 +32,13 @@ class Item extends Model
         'id' => 'integer',
         'expire_date' => 'timestamp',
     ];
+
+    public function toSearchableArray()
+    {
+        return [
+            'name' => $this->name,
+            'price' => $this->price,
+            'cost' => $this->cost,
+        ];
+    }
 }

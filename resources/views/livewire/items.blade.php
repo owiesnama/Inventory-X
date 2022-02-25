@@ -3,6 +3,26 @@
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             @if (session()->has('message'))
             @endif
+            <div class="flex items-end justify-between mb-4">
+                <div class="w-1/3 space-y-1">
+                    <x-jet-input id="search" class="block w-full mt-1 " type="text" inputmode="numeric"
+                    placeholder="Item to search for ..."
+                        wire:model="search" name="search" />
+                </div>
+                <div class="space-y-1">
+                    <x-jet-label for="perPage" value="{{ __('Per page') }}" />
+
+                    <select id="perPage"
+                        class="block w-24 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        type="number" inputmode="numeric" wire:model="perPage" name="perPage" />
+                        <option value="10" selected>10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        </select>
+                </div>
+            </div>
+
             <div class="mb-4 overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
