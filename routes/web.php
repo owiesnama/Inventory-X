@@ -19,7 +19,6 @@ Route::get('/', function () {
 
 
 Route::resource('customers', App\Http\Controllers\CustomersController::class)->only('index', 'store');
-Route::resource('customers', App\Http\Controllers\CustomersController::class)->only('index', 'store');
 
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
@@ -29,3 +28,8 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 Route::view('/items','items.index')->middleware(['auth:sanctum', 'verified'])->name('items');
 Route::view('/customers','customers.index')->middleware(['auth:sanctum', 'verified'])->name('customers');
 Route::view('/storages','storages.index')->middleware(['auth:sanctum', 'verified'])->name('storages');
+
+
+Route::get('/storages/{id}', \App\Http\Livewire\StorageItems::class)->middleware(['auth:sanctum', 'verified']);
+
+

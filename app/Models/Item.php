@@ -40,4 +40,10 @@ class Item extends Model
             'cost' => $this->cost,
         ];
     }
+
+    public function storages(){
+      
+            return $this->belongsToMany(Storage::class);
+       
+    }
 }
