@@ -14,14 +14,16 @@ class Storages extends Component
     public $isDeleting = false;
     public $storage = [];
     public $itemToDelete;
+    public $perPage = 10;
+    public $search = "";
 
 
     public function store()
     {
-        
+
         $this->validate([
             'storage.title' => "required",
-             "storage.Address" => "required",
+            "storage.Address" => "required",
         ]);
 
         Storage::create($this->storage);
@@ -50,9 +52,9 @@ class Storages extends Component
     }
     public function render()
     {
-        
+
         return view('livewire.storage', [
-            'storages' => Storage::paginate(10),
+            'storages' => Storage::search($this->search)->paginate($this->perPage),
         ]);
     }
 }

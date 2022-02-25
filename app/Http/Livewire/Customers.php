@@ -15,6 +15,8 @@ class Customers extends Component
     public $isDeleting = false;
     public $customer = [];
     public $itemToDelete;
+    public $perPage = 10;
+    public $search = 10;
 
     public function store()
     {
@@ -47,13 +49,13 @@ class Customers extends Component
     }
 
 
-   
+
 
     public function render()
     {
-        
+
         return view('livewire.customers', [
-            'customers' => Customer::paginate(10),
+            'customers' => Customer::search($this->search)->paginate($this->perPage),
         ]);
     }
 }

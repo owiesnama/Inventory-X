@@ -8,8 +8,7 @@ use Laravel\Scout\Searchable;
 
 class Item extends Model
 {
-    use HasFactory;
-    use Searchable;
+    use HasFactory,Searchable;
 
     /**
      * The attributes that are mass assignable.

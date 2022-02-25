@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Storage extends Model
 {
-    use HasFactory;
-
+    use HasFactory,Searchable;
     /**
      * The attributes that are mass assignable.
      *
@@ -27,4 +27,12 @@ class Storage extends Model
     protected $casts = [
         'id' => 'integer',
     ];
+
+    public function toSearchableArray()
+    {
+        return [
+            'title' => $this->name,
+            'address' => $this->address,
+        ];
+    }
 }
