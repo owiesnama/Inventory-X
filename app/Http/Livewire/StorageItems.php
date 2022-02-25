@@ -8,21 +8,20 @@ use Livewire\Component;
 
 class StorageItems extends Component
 {
-    public $storageId;
+    public $storage;
     
 
 
-    public function mount($id){
-     $this->storageId = $id;
+    public function mount(Storage $storage){
+     $this->storage = $storage;
     }
 
    
     public function render()
     {
        
-        $storage = Storage::where('id', $this->storageId)->first();
         return view('livewire.storage-items', [
-            'storage' => $storage,
+            'storage' => $this->storage,
         ]);
     }
 }

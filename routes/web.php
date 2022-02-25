@@ -30,6 +30,6 @@ Route::view('/customers','customers.index')->middleware(['auth:sanctum', 'verifi
 Route::view('/storages','storages.index')->middleware(['auth:sanctum', 'verified'])->name('storages');
 
 
-Route::get('/storages/{id}', \App\Http\Livewire\StorageItems::class)->middleware(['auth:sanctum', 'verified']);
+Route::get('/storages/{storage}', \App\Http\Livewire\StorageItems::class)->middleware(['auth:sanctum', 'verified']);
 
 
