@@ -11,11 +11,15 @@ class Storages extends Component
 {
     use WithPagination;
     public $isAddingNewItem = false;
+    public $isUpdating = false;
     public $isDeleting = false;
+    public $storageToDelete;
     public $storage = [];
     public $itemToDelete;
     public $perPage = 10;
     public $search = "";
+    public $singleStorage;
+
 
 
     public function store()
@@ -33,21 +37,49 @@ class Storages extends Component
         session()->flash('message', 'A new storage has been added');
     }
 
+    public function update($id)
+    {
+        $this->isUpdating = !$this->isUpdating;
+
+        $storage = Storage::find($id);
+        $this->singleStorage = $storage;
+        $this->storage = $storage->toArray();
+    }
+    public function edit()
+    {
+        $storage = Storage::find($this->singleStorage)->first();
+        $storage->update([
+            'title' => $this->storage['title'],
+            'Address' => $this->storage['Address'],
+        ]);
+
+        $this->isUpdating = !$this->isUpdating;
+    }
+
+    public function toggleUpdaingModal()
+    {
+        $this->isUpdating = !$this->isUpdating;
+    }
+
+
 
     public function toggleAddingModal()
     {
         $this->isAddingNewItem = !$this->isAddingNewItem;
     }
 
-    public function confirmingDeletion($item)
+
+
+
+    public function confirmingDeletion($storage)
     {
         $this->isDeleting = true;
-        $this->itemToDelete = $item;
+        $this->storageToDelete = $storage;
     }
 
     public function destroy()
     {
-        Storage::find($this->itemToDelete['id'])->delete();
+        Storage::find($this->storageToDelete['id'])->delete();
         $this->isDeleting = false;
     }
     public function render()

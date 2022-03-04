@@ -12,6 +12,7 @@ class StorageItems extends Component
 {
     public $storage;
     public $isAddingNewItem = false;
+    public $isUpdating = false;
     public $storageItem = [];
     public $item = [];
     public $quantity ;
@@ -53,12 +54,10 @@ class StorageItems extends Component
             
            
            $Storage = Storage::all();
-        //    $Storage = items()->groupBy('item_id');
-        //    dd($Storage);
+        
                 
         return view('livewire.storage-items', [
             'storage' => $this->storage->items()->groupBy('item_id'),
-            
             'items' => $items
             
         ]);
