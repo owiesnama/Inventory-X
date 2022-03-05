@@ -13,10 +13,14 @@ class Customers extends Component
     use WithPagination;
     public $isAddingNewItem = false;
     public $isDeleting = false;
+    public $isUpdating = false;
     public $customer = [];
     public $itemToDelete;
     public $perPage = 10;
-    public $search = 10;
+    public $search = "";
+    public $singleCustomer;
+
+
 
     public function store()
     {
@@ -37,6 +41,33 @@ class Customers extends Component
     {
         $this->isAddingNewItem = !$this->isAddingNewItem;
     }
+
+    public function update($id)
+    {
+        $this->isUpdating = !$this->isUpdating;
+
+        $customer = Customer::find($id);
+        $this->singleCustomer = $customer;
+        $this->customer = $customer->toArray();
+    }
+    public function edit()
+    {
+        $customer = Customer::find($this->singleCustomer)->first();
+        $customer->update([
+            'name' => $this->customer['name'],
+            'address' => $this->customer['address'],
+            'phone_number' => $this->customer['phone_number'],
+        ]);
+
+        $this->isUpdating = !$this->isUpdating;
+    }
+
+    public function toggleUpdaingModal()
+    {
+        $this->isUpdating = !$this->isUpdating;
+    }
+
+
     public function confirmingDeletion($item)
     {
         $this->isDeleting = true;
@@ -54,8 +85,10 @@ class Customers extends Component
     public function render()
     {
 
+        
         return view('livewire.customers', [
             'customers' => Customer::search($this->search)->paginate($this->perPage),
+           
         ]);
     }
 }

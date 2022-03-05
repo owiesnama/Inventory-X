@@ -13,8 +13,11 @@ class Items extends Component
     public $search = '';
     public $isAddingNewItem = false;
     public $isDeleting = false;
+    public $isUpdating = false;
+
     public $item = [];
     public $itemToDelete;
+    public $singleItem;
 
     public function store()
     {
@@ -23,7 +26,7 @@ class Items extends Component
             'item.name' => "required",
             "item.price" => "required",
             "item.cost" => "required",
-            "item.expired_date" => "nullable",
+            "item.expire_date" => "nullable",
         ]);
 
         Item::create($this->item);
@@ -37,6 +40,30 @@ class Items extends Component
     {
         $this->isAddingNewItem = !$this->isAddingNewItem;
     }
+
+    public function update($id)
+    {
+        $this->isUpdating = !$this->isUpdating;
+
+        $item = Item::find($id);
+        $this->singleItem = $item;
+        $this->item = $item->toArray();
+    }
+    public function edit()
+    {
+        $item = Item::find($this->singleItem)->first();
+        $item->update([
+            'name' => $this->item['name'],
+            'price' => $this->item['price'],
+            'cost' => $this->item['cost'],
+            'expire_date' => $this->item['expire_date'],
+        ]);
+
+        $this->isUpdating = !$this->isUpdating;
+    }
+
+
+
 
     public function confirmingDeletion($item)
     {
