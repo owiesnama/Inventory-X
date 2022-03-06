@@ -41,9 +41,9 @@ class Item extends Model
         ];
     }
 
-    public function storages(){
+    public function warehouses(){
       
-            return $this->belongsToMany(Storage::class);
+            return $this->belongsToMany(Warehouse::class);
        
     }
 }

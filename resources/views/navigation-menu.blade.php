@@ -21,8 +21,8 @@
                     <x-jet-nav-link href="{{ route('customers') }}" :active="request()->routeIs('customers')">
                         {{ __('Customers') }}
                     </x-jet-nav-link>
-                    <x-jet-nav-link href="{{ route('storages') }}" :active="request()->routeIs('storages')">
-                        {{ __('Storage') }}
+                    <x-jet-nav-link href="{{ route('warehouses') }}" :active="request()->routeIs('warehouses')">
+                        {{ __('Warehouse') }}
                     </x-jet-nav-link>
                 </div>
            
@@ -157,8 +157,8 @@
             <x-jet-responsive-nav-link href="{{ route('customers') }}" :active="request()->routeIs('customers')">
                 {{ __('customers') }}
             </x-jet-responsive-nav-link>
-            <x-jet-responsive-nav-link href="{{ route('storages') }}" :active="request()->routeIs('storages')">
-                {{ __('Storage') }}
+            <x-jet-responsive-nav-link href="{{ route('warehouses') }}" :active="request()->routeIs('warehouses')">
+                {{ __('Warehouse') }}
             </x-jet-responsive-nav-link>
         </div>
 

@@ -2,23 +2,23 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Storage;
+use App\Models\Warehouse;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class Storages extends Component
+class Warehouses extends Component
 {
     use WithPagination;
     public $isAddingNewItem = false;
     public $isUpdating = false;
     public $isDeleting = false;
-    public $storageToDelete;
-    public $storage = [];
+    public $warehouseToDelete;
+    public $warehouse = [];
     public $itemToDelete;
     public $perPage = 10;
     public $search = "";
-    public $singleStorage;
+    public $singleWarehouse;
 
 
 
@@ -26,31 +26,31 @@ class Storages extends Component
     {
 
         $this->validate([
-            'storage.title' => "required",
-            "storage.Address" => "required",
+            'warehouse.title' => "required",
+            "warehouse.Address" => "required",
         ]);
 
-        Storage::create($this->storage);
+        Warehouse::create($this->warehouse);
 
         $this->isAddingNewItem = false;
 
-        session()->flash('message', 'A new storage has been added');
+        session()->flash('message', 'A new warehouse has been added');
     }
 
     public function update($id)
     {
         $this->isUpdating = !$this->isUpdating;
 
-        $storage = Storage::find($id);
-        $this->singleStorage = $storage;
-        $this->storage = $storage->toArray();
+        $warehouse = Warehouse::find($id);
+        $this->singleWarehouse = $warehouse;
+        $this->warehouse = $warehouse->toArray();
     }
     public function edit()
     {
-        $storage = Storage::find($this->singleStorage)->first();
-        $storage->update([
-            'title' => $this->storage['title'],
-            'Address' => $this->storage['Address'],
+        $warehouse = warehouse::find($this->singleWarehouse)->first();
+        $warehouse->update([
+            'title' => $this->warehouse['title'],
+            'Address' => $this->warehouse['Address'],
         ]);
 
         $this->isUpdating = !$this->isUpdating;
@@ -79,14 +79,14 @@ class Storages extends Component
 
     public function destroy()
     {
-        Storage::find($this->storageToDelete['id'])->delete();
+        Warehouse::find($this->warehouseToDelete['id'])->delete();
         $this->isDeleting = false;
     }
     public function render()
     {
 
-        return view('livewire.storage', [
-            'storages' => Storage::search($this->search)->paginate($this->perPage),
+        return view('livewire.warehouse', [
+            'warehouses' => Warehouse::search($this->search)->paginate($this->perPage),
         ]);
     }
 }

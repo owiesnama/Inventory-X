@@ -27,9 +27,14 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 Route::view('/items','items.index')->middleware(['auth:sanctum', 'verified'])->name('items');
 Route::view('/customers','customers.index')->middleware(['auth:sanctum', 'verified'])->name('customers');
-Route::view('/storages','storages.index')->middleware(['auth:sanctum', 'verified'])->name('storages');
 
 
-Route::get('/storages/{storage}', \App\Http\Livewire\StorageItems::class)->middleware(['auth:sanctum', 'verified']);
 
 
+Route::view('/warehouses','warehouses.index')->middleware(['auth:sanctum', 'verified'])->name('warehouses');
+
+
+Route::get('/warehouses/{warehouse}', \App\Http\Livewire\WarehouseItems::class)->middleware(['auth:sanctum', 'verified']);
+
+
+// Route::get('/storages/{storage}', \App\Http\Livewire\StorageItems::class)->middleware(['auth:sanctum', 'verified']);
