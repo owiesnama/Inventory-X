@@ -86,7 +86,7 @@
             </x-slot>
             <x-slot name="footer">
                 <button class="px-6 py-2 text-white bg-red-600 rounded hover:bg-red-900" type="submit">Delete
-                    Item</button>
+                    Customer</button>
                 <button class="px-6 py-2 text-gray-600 rounded" wire:click="$set('isDeleting', false)"
                     type="button">Cancel</button>
             </x-slot>

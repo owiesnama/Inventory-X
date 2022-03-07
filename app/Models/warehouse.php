@@ -4,19 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
-class ItemsStorage extends Model
+class Warehouse extends Model
 {
-    use HasFactory;
-
+    use HasFactory,Searchable;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'item_id',
-        'storage_id',
+        'title',
+        'Address',
     ];
 
     /**
@@ -26,17 +26,18 @@ class ItemsStorage extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'item_id' => 'integer',
-        'storage_id' => 'integer',
     ];
 
-    public function item()
+    public function toSearchableArray()
     {
-        return $this->belongsTo(\App\Models\Items::class);
+        return [
+            'title' => $this->name,
+            'address' => $this->address,
+        ];
     }
-
-    public function storage()
-    {
-        return $this->belongsTo(\App\Models\Storages::class);
+    public function items(){
+      
+        return $this->belongsToMany(Item::class);
+   
     }
 }

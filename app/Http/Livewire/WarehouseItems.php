@@ -3,32 +3,29 @@
 namespace App\Http\Livewire;
 
 use App\Models\Item;
-use App\Models\Storage;
+use App\Models\Warehouse;
 use Livewire\Component;
 use Symfony\Component\Console\Input\Input;
 
 
-class StorageItems extends Component
+class WarehouseItems extends Component
 {
-    public $storage;
+    public $warehouse;
     public $isAddingNewItem = false;
     public $isUpdating = false;
-    public $storageItem = [];
+    public $warehouseItem = [];
     public $item = [];
     public $quantity ;
     
   
 
     public function store(){
-   
-
-        $storage = Storage::find($this->storage)->first();
+        $warehouse = Warehouse::find($this->warehouse)->first();
+        dd($warehouse->id);
         
-
         for ($i=1; $i <= $this->quantity; $i++) {
-            $storage->items()->attach([$this->item]);
+            $warehouse->items()->attach([$this->item]);
           } 
-
           $this->isAddingNewItem = false;
       
     }
@@ -41,9 +38,11 @@ class StorageItems extends Component
 
    
 
-    public function mount(Storage $storage)
+    public function mount(Warehouse $warehouse)
     {
-        $this->storage = $storage;
+        $this->warehouse = $warehouse;
+        
+        
     }
     
     
@@ -53,11 +52,11 @@ class StorageItems extends Component
         $items = Item::all();
             
            
-           $Storage = Storage::all();
+           $warehouse = Warehouse::all();
         
                 
-        return view('livewire.storage-items', [
-            'storage' => $this->storage->items()->groupBy('item_id'),
+        return view('livewire.warehouse-items', [
+            'warehouse' => $this->warehouse->items()->groupBy('item_id'),
             'items' => $items
             
         ]);
