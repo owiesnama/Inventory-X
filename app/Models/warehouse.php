@@ -35,9 +35,9 @@ class Warehouse extends Model
             'address' => $this->address,
         ];
     }
-    public function items(){
+    // public function items(){
       
-        return $this->belongsToMany(Item::class);
+    //     return $this->belongsToMany(Item::class);
    
-    }
+    // }
 }

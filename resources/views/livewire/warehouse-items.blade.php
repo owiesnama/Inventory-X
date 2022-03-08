@@ -43,15 +43,15 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         
-                        @foreach ($warehouse->items as $item)
+                        @foreach ($data as $item)
                         <tr :wire:key="'warehouse-'.$warehouse->id">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
                                         <div class="text-sm font-medium text-gray-900"><a
                                                 href="{{ url('warehouses/'. $warehouse->id) }}">
-                                                {{ $item->name }}
-                                               
+                                                {{ $item->item->name }}
+                                                
 
                                             </a></div>
 
@@ -60,13 +60,13 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm text-gray-900">
-                                    5
+                                    {{ $item->quantity }}
                                 </div>
                                
                             </td>
                             <td class="px-6 py-4 space-x-4 text-sm font-medium text-right whitespace-nowrap">
                                 <a href="#" class="text-indigo-600 hover:text-indigo-900" wire:click="update({{ $item->id }})">Edit</a>                                <a href="#" class="text-red-600 hover:text-red-900"
-                                    wire:click="confirmingDeletion({{ $warehouse }})">Delete</a>
+                                    wire:click="confirmingDeletion({{ $item }})">Delete</a>
                             </td>
                         </tr>
                         @endforeach
@@ -166,10 +166,10 @@
                                     focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                                         aria-label="Default select example" wire:model="item">
                                         <option selected> Items</option>
-                                        @foreach ($items as $item) --}}
+                                        {{-- @foreach ($items as $item) --}}
     
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                        @endforeach
+                                        {{-- <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        @endforeach  --}}
                                     </select>
                                 </div>
                             </div>
@@ -185,5 +185,23 @@
             </x-jet-dialog-modal>
         </form>
         <!-- End Update modal form -->
+
+        <!-- Delete Modal Form -->
+        <form method="post" wire:submit.prevent="destroy()">
+            <x-jet-confirmation-modal wire:model="isDeleting">
+                <x-slot name="title">
+                    Are you sure you want to delete <strong>{{ optional($itemToDelete)['name'] }}</strong>
+                </x-slot>
+                <x-slot name="content">
+                </x-slot>
+                <x-slot name="footer">
+                    <button class="px-6 py-2 text-white bg-red-600 rounded hover:bg-red-900" type="submit">Delete
+                        Item</button>
+                    <button class="px-6 py-2 text-gray-600 rounded" wire:click="$set('isDeleting', false)"
+                        type="button">Cancel</button>
+                </x-slot>
+            </x-jet-confirmation-modal>
+        </form>
+        <!-- Delete Modal Form End -->
     
 </div>
