@@ -36,8 +36,7 @@ class Item extends Model
     {
         return [
             'name' => $this->name,
-            'price' => $this->price,
-            'cost' => $this->cost,
+           
         ];
     }
 
