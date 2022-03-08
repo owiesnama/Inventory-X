@@ -4,8 +4,10 @@ namespace App\Http\Livewire;
 
 use App\Models\Item;
 use App\Models\Warehouse;
+use App\Models\ItemsWarehouse;
 use Livewire\Component;
-use Symfony\Component\Console\Input\Input;
+use Livewire\WithPagination;
+
 
 
 class WarehouseItems extends Component
@@ -13,21 +15,54 @@ class WarehouseItems extends Component
     public $warehouse;
     public $isAddingNewItem = false;
     public $isUpdating = false;
+    public $isDeleting = false;
     public $warehouseItem = [];
     public $item = [];
+    public $itemToDelete;
     public $quantity ;
+    public $perPage = 10;
+    public $search = "";
     
   
 
     public function store(){
-        $warehouse = Warehouse::find($this->warehouse)->first();
-        dd($warehouse->id);
+     
         
-        for ($i=1; $i <= $this->quantity; $i++) {
-            $warehouse->items()->attach([$this->item]);
-          } 
+        $quantity = ItemsWarehouse::where('item_id' , $this->item)->first();
+
+        if($quantity){
+
+            $warehouse = ItemsWarehouse::updateOrCreate(['item_id' => $this->item],[
+                'warehouse_id' => $this->warehouse->id,
+                'quantity' => ($this->quantity) + ($quantity->quantity),
+                
+            ]);
+
+        }else {
+
+            $warehouse = ItemsWarehouse::updateOrCreate(['item_id' => $this->item],[
+                'warehouse_id' => $this->warehouse->id,
+                'quantity' => ($this->quantity),
+                
+            ]);
+
+        }
+        
+        
           $this->isAddingNewItem = false;
       
+    }
+
+    public function confirmingDeletion($item)
+    {
+        $this->isDeleting = true;
+        $this->itemToDelete = $item;
+    }
+
+    public function destroy()
+    {
+        ItemsWarehouse::find($this->itemToDelete['id'])->delete();
+        $this->isDeleting = false;
     }
 
 
@@ -46,18 +81,16 @@ class WarehouseItems extends Component
     }
     
     
+
+
+
     public function render()
     {
         
-        $items = Item::all();
-            
-           
-           $warehouse = Warehouse::all();
-        
-                
+        $items = Item::all();     
         return view('livewire.warehouse-items', [
-            'warehouse' => $this->warehouse->items()->groupBy('item_id'),
-            'items' => $items
+            'items' => $items,
+            'data' => ItemsWarehouse::where('warehouse_id', $this->warehouse->id)->paginate($this->perPage), 
             
         ]);
     }

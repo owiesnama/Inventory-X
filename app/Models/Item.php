@@ -36,14 +36,9 @@ class Item extends Model
     {
         return [
             'name' => $this->name,
-            'price' => $this->price,
-            'cost' => $this->cost,
+           
         ];
     }
 
-    public function warehouses(){
-      
-            return $this->belongsToMany(Warehouse::class);
-       
-    }
+  
 }

@@ -15,10 +15,11 @@ class CreateItemsWarehousesTable extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::create('item_warehouse', function (Blueprint $table) {
+        Schema::create('items_warehouses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('item_id')->constrained();
             $table->foreignId('warehouse_id')->constrained();
+            $table->string('quantity');
             $table->timestamps();
         });
 
