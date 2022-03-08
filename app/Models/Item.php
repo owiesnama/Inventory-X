@@ -41,9 +41,5 @@ class Item extends Model
         ];
     }
 
-    // public function warehouses(){
-      
-    //         return $this->belongsToMany(Warehouse::class);
-       
-    // }
+  
 }
