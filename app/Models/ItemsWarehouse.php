@@ -9,8 +9,9 @@ use Laravel\Scout\Searchable;
 
 class ItemsWarehouse extends Model
 {
-    use HasFactory,Searchable;
+    use HasFactory, Searchable;
 
+    protected $appends = ['totalCost'];
     /**
      * The attributes that are mass assignable.
      *
@@ -21,25 +22,9 @@ class ItemsWarehouse extends Model
         'warehouse_id',
         'quantity'
     ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'id' => 'integer',
-        'item_id' => 'integer',
-        'warehouse_id' => 'integer',
-        
-    ];
-    public function toSearchableArray()
+    public function getTotalCostAttribute()
     {
-        return [
-            'name' => $this->name,
-            'price' => $this->price,
-            'cost' => $this->cost,
-        ];
+        return  $this->item ? $this->quantity * $this->item->cost : 0 ;
     }
 
     public function item()
@@ -50,5 +35,14 @@ class ItemsWarehouse extends Model
     public function warehouse()
     {
         return $this->belongsTo(\App\Models\Warehouse::class);
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            'name' => $this->name,
+            'price' => $this->price,
+            'cost' => $this->cost,
+        ];
     }
 }
