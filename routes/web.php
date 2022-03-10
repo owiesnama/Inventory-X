@@ -14,27 +14,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 
 Route::resource('customers', App\Http\Controllers\CustomersController::class)->only('index', 'store');
 
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+Route::middleware(['auth:sanctum'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::view('/items','items.index')->middleware(['auth:sanctum', 'verified'])->name('items');
-Route::view('/customers','customers.index')->middleware(['auth:sanctum', 'verified'])->name('customers');
-
-
-
-
-Route::view('/warehouses','warehouses.index')->middleware(['auth:sanctum', 'verified'])->name('warehouses');
-
-
-Route::get('/warehouses/{warehouse}', \App\Http\Livewire\WarehouseItems::class)->middleware(['auth:sanctum', 'verified']);
-
-
-// Route::get('/storages/{storage}', \App\Http\Livewire\StorageItems::class)->middleware(['auth:sanctum', 'verified']);
+Route::view('/items','items.index')->middleware(['auth:sanctum'])->name('items');
+Route::view('/customers','customers.index')->middleware(['auth:sanctum'])->name('customers');
+Route::view('/warehouses','warehouses.index')->middleware(['auth:sanctum'])->name('warehouses');
+Route::get('/warehouses/{warehouse}', \App\Http\Livewire\WarehouseItems::class)->middleware(['auth:sanctum',]);

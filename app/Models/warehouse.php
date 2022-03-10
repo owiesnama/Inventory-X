@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Warehouse extends Model
 {
-    use HasFactory,Searchable;
+    use HasFactory, Searchable;
     /**
      * The attributes that are mass assignable.
      *
@@ -19,15 +19,18 @@ class Warehouse extends Model
         'Address',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'id' => 'integer',
-    ];
+    public function stock()
+    {
+        return $this->hasMany(ItemsWarehouse::class);
+    }
 
+    public function addStock($stock)
+    {
+        $stockItem = $this->stock()->firstOrNew(['item_id' => $stock->item_id]);
+        $stockItem->quantity += $stock->quantity;
+        $stockItem->save();
+        return $this;
+    }
     public function toSearchableArray()
     {
         return [
@@ -35,5 +38,4 @@ class Warehouse extends Model
             'address' => $this->address,
         ];
     }
-    
 }
