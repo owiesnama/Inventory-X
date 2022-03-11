@@ -111,11 +111,6 @@
                             wire:model="item.name" name="name" autofocus x-ref="name" autocomplete="one-time-code" />
                     </div>
                     <div class="space-y-1">
-                        <x-jet-label for="cost" value="{{ __('Cost') }}" />
-                        <x-jet-input id="cost" class="block w-full mt-1" type="number" inputmode="numeric"
-                            wire:model="item.cost" name="cost" x-ref="name" />
-                    </div>
-                    <div class="space-y-1">
                         <x-jet-label for="price" value="{{ __('Price') }}" />
                         <x-jet-input id="price" class="block w-full mt-1" type="number" inputmode="numeric"
                             wire:model="item.price" name="price" x-ref="name" />

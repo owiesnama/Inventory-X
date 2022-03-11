@@ -8,7 +8,7 @@ use Laravel\Scout\Searchable;
 
 class Item extends Model
 {
-    use HasFactory,Searchable;
+    use HasFactory, Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -32,13 +32,15 @@ class Item extends Model
         'expire_date' => 'timestamp',
     ];
 
+    public function purchasements()
+    {
+        return $this->belongsToMany(Purchasement::class);
+    }
+
     public function toSearchableArray()
     {
         return [
             'name' => $this->name,
-           
         ];
     }
-
-  
 }
