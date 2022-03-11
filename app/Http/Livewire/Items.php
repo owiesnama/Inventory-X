@@ -25,7 +25,6 @@ class Items extends Component
         $this->validate([
             'item.name' => "required",
             "item.price" => "required",
-            "item.cost" => "required",
             "item.expire_date" => "nullable",
         ]);
 

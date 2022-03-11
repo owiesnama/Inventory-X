@@ -29,3 +29,4 @@ Route::view('/items','items.index')->middleware(['auth:sanctum'])->name('items')
 Route::view('/customers','customers.index')->middleware(['auth:sanctum'])->name('customers');
 Route::view('/warehouses','warehouses.index')->middleware(['auth:sanctum'])->name('warehouses');
 Route::get('/warehouses/{warehouse}', \App\Http\Livewire\WarehouseItems::class)->middleware(['auth:sanctum',]);
+Route::get('purchasements', \App\Http\Livewire\Purchasements::class)->middleware(['auth:sanctum',])->name('purchasements');        

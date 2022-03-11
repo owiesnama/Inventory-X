@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateItemsTable extends Migration
+class CreatePurchasementsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('purchasements', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 200);
-            $table->unsignedInteger('price');
-            $table->unsignedInteger('cost')->default(0);
-            $table->timestamp('expire_date')->nullable();
+            $table->unsignedBigInteger('vendor_id')->nullable();
+            $table->double('total_cost');
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreateItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('purchasements');
     }
 }
