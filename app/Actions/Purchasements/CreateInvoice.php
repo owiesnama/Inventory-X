@@ -12,7 +12,6 @@ use Illuminate\Support\Collection;
 class CreateInvoice
 {
     public $vendor;
-
     public $items;
     public function __invoke(Collection $items, $vendor)
     {
