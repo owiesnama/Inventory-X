@@ -12,6 +12,7 @@ use Illuminate\Support\Collection;
 class CreateInvoice
 {
     public $vendor;
+
     public $items;
     public function __invoke(Collection $items, $vendor)
     {
@@ -19,6 +20,7 @@ class CreateInvoice
         $this->vendor = $vendor;
         $this->saveInvoice()->addStockToWarehouses();
     }
+    
     public function addStockToWarehouses()
     {
         foreach ($this->items as $item) {

@@ -2,83 +2,68 @@
 
 namespace App\Http\Livewire;
 
+use App\Http\Livewire\DataTable\WithPerPagePagination;
+use App\Http\Livewire\DataTable\WithSorting;
 use App\Models\Item;
 use Livewire\Component;
-use Livewire\WithPagination;
 
 class Items extends Component
 {
-    use WithPagination;
-    public $perPage = 10;
+    use WithPerPagePagination, WithSorting;
+
     public $search = '';
-    public $isAddingNewItem = false;
-    public $isDeleting = false;
-    public $isUpdating = false;
+    public $editing;
+    public $deleting;
+    public $showModal;
+    public $showConfirmationModal;
 
-    public $item = [];
-    public $itemToDelete;
-    public $singleItem;
+    protected $rules = [
+        'deleting' => 'sometimes',
+        'editing.name' => "required",
+        "editing.price" => "required",
+        "editing.expire_date" => "nullable",
+    ];
 
-    public function store()
+    public function save()
     {
-
-        $this->validate([
-            'item.name' => "required",
-            "item.price" => "required",
-            "item.expire_date" => "nullable",
-        ]);
-
-        Item::create($this->item);
-
-        $this->isAddingNewItem = false;
-
+        $this->validate();
+        $this->editing->save();
+        $this->showModal = false;
         session()->flash('message', 'A new item has been added');
     }
 
-    public function toggleAddingModal()
+    public function create()
     {
-        $this->isAddingNewItem = !$this->isAddingNewItem;
+        $this->editing = $this->makeBlankItem();
+        $this->showModal = true;
+    }
+    public function edit(Item $item)
+    {
+        $this->editing = $item;
+        $this->showModal = true;
     }
 
-    public function update($id)
+    public function makeBlankItem()
     {
-        $this->isUpdating = !$this->isUpdating;
-
-        $item = Item::find($id);
-        $this->singleItem = $item;
-        $this->item = $item->toArray();
-    }
-    public function edit()
-    {
-        $item = Item::find($this->singleItem)->first();
-        $item->update([
-            'name' => $this->item['name'],
-            'price' => $this->item['price'],
-            'cost' => $this->item['cost'],
-            'expire_date' => $this->item['expire_date'],
-        ]);
-
-        $this->isUpdating = !$this->isUpdating;
+        return Item::make(['expire_date' => now()->addYear(4)->toDateString()]);
     }
 
-
-
-
-    public function confirmingDeletion($item)
+    public function delete(Item $item)
     {
-        $this->isDeleting = true;
-        $this->itemToDelete = $item;
+        $this->deleting = $item;
+        $this->showConfirmationModal = true;
     }
 
     public function destroy()
     {
-        Item::find($this->itemToDelete['id'])->delete();
-        $this->isDeleting = false;
+        $this->deleting->delete();
+        $this->showConfirmationModal = true;
     }
+
     public function render()
     {
         return view('livewire.items', [
-            'items' => Item::search($this->search)->paginate($this->perPage),
+            'items' => $this->applyPagination($this->applySorting(Item::search($this->search))),
         ]);
     }
 }

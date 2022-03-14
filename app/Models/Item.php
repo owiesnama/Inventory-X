@@ -6,21 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 
-class Item extends Model
+class Item extends BaseModel
 {
-    use HasFactory, Searchable;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name',
-        'price',
-        'cost',
-        'expire_date',
-    ];
+    use HasFactory;
 
     /**
      * The attributes that should be cast to native types.
@@ -29,7 +17,7 @@ class Item extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'expire_date' => 'timestamp',
+        'expire_date' => 'date',
     ];
 
     public function purchasements()
@@ -37,10 +25,4 @@ class Item extends Model
         return $this->belongsToMany(Purchasement::class);
     }
 
-    public function toSearchableArray()
-    {
-        return [
-            'name' => $this->name,
-        ];
-    }
 }

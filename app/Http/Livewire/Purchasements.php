@@ -16,7 +16,14 @@ class Purchasements extends Component
     public $isUpdating = false;
     public $isDeleting = false;
     public $invoice;
-    public $invoiceItems;
+    public $invoiceItems = [
+        [
+            'item_id' => null,
+            'quantity' => null,
+            'warehouse' => null,
+            'cost' => null,
+        ]
+    ];
     public $invoiceToDelete;
     public $search = "";
 
@@ -67,7 +74,7 @@ class Purchasements extends Component
         return view('livewire.purchasements', [
             'warehouses' =>  Warehouse::all(),
             'items' =>  Item::all(),
-            'purchasements' =>  Purchasement::with('vendor')->paginate($this->perPage),
+            'purchasements' =>  $this->applyPagination(Purchasement::with('vendor')->search($this->search)),
         ]);
     }
 }

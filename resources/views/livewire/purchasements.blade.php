@@ -28,8 +28,10 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <x-table.row>
-                                        <x-table.heading sortable>Vendor</x-table.heading>
-                                        <x-table.heading sortable>Total Cost</x-table.heading>
+                                        <x-table.heading sortable wire:click="sortBy('vendor_id')"
+                                            :direction="$sorts['vendor_id'] ?? null">Vendor</x-table.heading>
+                                        <x-table.heading sortable wire:click="sortBy('total_cost')"
+                                            :direction="$sorts['total_cost'] ?? null">Total Cost</x-table.heading>
                                         <th scope="col" class="relative px-6 py-3 text-right">
                                             <button
                                                 class="px-6 py-2 text-white bg-indigo-600 rounded hover:bg-indigo-900"
@@ -89,87 +91,70 @@
                             Purchase Invoice
                         </x-slot>
                         <x-slot name="content">
-                            <div class="space-y-4 ">
+                            <div>
                                 <x-jet-validation-errors></x-jet-validation-errors>
-                                <div class="space-y-1">
+                                <div class="mt-4 space-y-1">
                                     <x-jet-label for="vendor" value="{{ __('Vendor') }}" />
                                     <x-jet-input id="vendor" class="block w-full mt-1" type="text" inputmode="numeric"
                                         wire:model="invoice.vendor" name="name" autofocus />
                                 </div>
-                                <div class="flex space-x-2">
-                                    <div class="">
-                                        <x-jet-label for="Item" value="{{ __('Item') }}" />
-                                        <select
-                                            class="form-select appearance-none
-                                block
-                                w-full
-                                px-3
-                                py-1.5
-                                text-base
-                                font-normal
-                                text-gray-700
-                                bg-white bg-clip-padding bg-no-repeat
-                                border border-solid border-gray-300
-                                rounded
-                                transition
-                                ease-in-out
-                                m-0
-                                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                            aria-label="Default select example" wire:model="invoiceItems.0.item_id">
-                                            <option value=""></option>
-                                            @foreach ($items as $item)
-                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                            @endforeach
-                                        </select>
+                                @foreach ($invoiceItems as $index => $item)
+                                    <div>
+                                        <div class="flex mt-4 mb-6 space-x-2">
+                                            <div class="w-1/4">
+                                                <x-jet-label for="Item" value="{{ __('Item') }}" />
+                                                <x-input.select aria-label="Default select example"
+                                                    class="block w-full mt-1"
+                                                    wire:model="invoiceItems.{{ $index }}.item_id">
+                                                    <option value=""></option>
+                                                    @foreach ($items as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </x-input.select>
+                                            </div>
+                                            <div class="w-1/4">
+                                                <x-jet-label for="cost" value="{{ __('Warehouse') }}" />
+                                                <x-input.select class="block w-full mt-1"
+                                                    wire:model="invoiceItems.{{ $index }}.warehouse">
+                                                    <option value=""></option>
+                                                    @foreach ($warehouses as $warehouse)
+                                                        <option value="{{ $warehouse->id }}">
+                                                            {{ $warehouse->title }}
+                                                        </option>
+                                                    @endforeach
+                                                </x-input.select>
+                                            </div>
+                                            <div class="w-1/4">
+                                                <x-jet-label for="quantity" value="{{ __('Quantity') }}" />
+                                                <x-jet-input id="quantity" class="block w-full mt-1" type="text"
+                                                    inputmode="numeric"
+                                                    wire:model="invoiceItems.{{ $index }}.quantity"
+                                                    name="address" />
+                                            </div>
+                                            <div class="w-1/4">
+                                                <x-jet-label for="cost" value="{{ __('Cost') }}" />
+                                                <x-jet-input id="cost" class="block w-full mt-1" type="number"
+                                                    inputmode="numeric"
+                                                    wire:model="invoiceItems.{{ $index }}.cost" name="cost" />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="">
-                                        <x-jet-label for="cost" value="{{ __('Warehouse') }}" />
-                                        <select
-                                            class="form-select appearance-none
-                                block
-                                w-full
-                                px-3
-                                py-1.5
-                                text-base
-                                font-normal
-                                text-gray-700
-                                bg-white bg-clip-padding bg-no-repeat
-                                border border-solid border-gray-300
-                                rounded
-                                transition
-                                ease-in-out
-                                m-0
-                                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                            aria-label="Default select example" wire:model="invoiceItems.0.warehouse">
-                                            <option value=""></option>
-                                            @foreach ($warehouses as $warehouse)
-                                                <option value="{{ $warehouse->id }}">{{ $warehouse->title }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="">
-                                        <x-jet-label for="quantity" value="{{ __('Quantity') }}" />
-                                        <x-jet-input id="quantity" class="block w-full mt-1" type="text"
-                                            inputmode="numeric" wire:model="invoiceItems.0.quantity" name="address" />
-                                    </div>
-                                    <div class="">
-                                        <x-jet-label for="cost" value="{{ __('Cost') }}" />
-                                        <x-jet-input id="cost" class="block w-full mt-1" type="number"
-                                            inputmode="numeric" wire:model="invoiceItems.0.cost" name="cost" />
-                                    </div>
+                                @endforeach
+                                <div class="mt-2 text-right">
+                                    <x-button.primary>
+                                        <x-feathericon-plus-circle  class="inline-block p-4 m"/>
+                                        New Item
+                                    </x-button.primary>
                                 </div>
-                                <div class="space-y-1">
+                                <div class="mt-12 space-y-1">
                                     <x-jet-label for="date" value="{{ __('Date') }}" />
                                     <x-jet-input id="date" class="block w-full mt-1" type="date"
                                         wire:model="invoice.date" name="date" />
                                 </div>
-
-                            </div>
                         </x-slot>
                         <x-slot name="footer">
-                            <button class="px-6 py-2 text-white bg-indigo-600 rounded hover:bg-indigo-900"
-                                type="submit">Save
-                                Customer</button>
+                            <x-button.primary>Save</x-button.primary>
                             <button class="px-6 py-2 text-gray-600 rounded" wire:click="toggleAddingModal()"
                                 type="button">Cancel</button>
                         </x-slot>
