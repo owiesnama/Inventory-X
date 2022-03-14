@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-use Laravel\Scout\Searchable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Warehouse extends Model
+class Warehouse extends BaseModel
 {
-    use HasFactory, Searchable;
+    use HasFactory;
     /**
      * The attributes that are mass assignable.
      *

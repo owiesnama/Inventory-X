@@ -19,6 +19,7 @@ class CreateInvoice
         $this->vendor = $vendor;
         $this->saveInvoice()->addStockToWarehouses();
     }
+    
     public function addStockToWarehouses()
     {
         foreach ($this->items as $item) {

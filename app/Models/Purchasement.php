@@ -6,11 +6,14 @@ use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Purchasement extends Model
+class Purchasement extends BaseModel
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $searchableRelationsAttributes = [
+        'items.name',
+        'vendor.name'
+    ];
     protected $casts = [
         'items' => AsCollection::class
     ];
