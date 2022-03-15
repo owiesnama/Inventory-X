@@ -3,90 +3,76 @@
 namespace App\Http\Livewire;
 
 use App\Models\Warehouse;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Livewire\DataTable\WithPerPagePagination;
+use App\Http\Livewire\DataTable\WithSorting;
 use Livewire\Component;
-use Livewire\WithPagination;
+
 
 class Warehouses extends Component
 {
-    use WithPagination;
-    public $isAddingNewItem = false;
-    public $isUpdating = false;
-    public $isDeleting = false;
-    public $warehouseToDelete;
-    public $warehouse = [];
-    public $itemToDelete;
-    public $perPage = 10;
+    use WithPerPagePagination, WithSorting;
+    public $showModal = false;
+    public $warehouse;
+    public $deleting;
     public $search = "";
     public $singleWarehouse;
 
 
+    protected $rules = [
+        'deleting' => 'sometimes',
+        'warehouse.title' => "required",
+        "warehouse.Address" => "required",
 
-    public function store()
+    ];
+
+    public function save()
     {
 
-        $this->validate([
-            'warehouse.title' => "required",
-            "warehouse.Address" => "required",
-        ]);
-
-        Warehouse::create($this->warehouse);
-
-        $this->isAddingNewItem = false;
-
+        $this->validate();
+        $this->warehouse->save();
+        $this->showModal = false;
         session()->flash('message', 'A new warehouse has been added');
     }
 
-    public function update($id)
-    {
-        $this->isUpdating = !$this->isUpdating;
 
-        $warehouse = Warehouse::find($id);
-        $this->singleWarehouse = $warehouse;
-        $this->warehouse = $warehouse->toArray();
+    public function create()
+    {
+        $this->warehouse = $this->makeBlankItem();
+        $this->showModal = true;
     }
-    public function edit()
+    public function makeBlankItem()
     {
-        $warehouse = warehouse::find($this->singleWarehouse)->first();
-        $warehouse->update([
-            'title' => $this->warehouse['title'],
-            'Address' => $this->warehouse['Address'],
-        ]);
-
-        $this->isUpdating = !$this->isUpdating;
-    }
-
-    public function toggleUpdaingModal()
-    {
-        $this->isUpdating = !$this->isUpdating;
+        return Warehouse::make(['title' => ""]);
     }
 
 
-
-    public function toggleAddingModal()
+    public function edit(Warehouse $warehouse)
     {
-        $this->isAddingNewItem = !$this->isAddingNewItem;
+        $this->warehouse = $warehouse;
+        $this->showModal = true;
     }
 
-
-
-
-    public function confirmingDeletion($storage)
+    public function showModal()
     {
-        $this->isDeleting = true;
-        $this->storageToDelete = $storage;
+        $this->showModal = !$this->showModal;
+    }
+
+    public function delete(Warehouse $warehouse)
+    {
+        $this->deleting = $warehouse;
     }
 
     public function destroy()
     {
-        Warehouse::find($this->warehouseToDelete['id'])->delete();
-        $this->isDeleting = false;
+        $this->deleting->delete();
+        $this->deleting = "";
     }
+
     public function render()
     {
 
         return view('livewire.warehouse', [
-            'warehouses' => Warehouse::search($this->search)->paginate($this->perPage),
+            'warehouses' => $this->applyPagination($this->applySorting(Warehouse::search($this->search))),
         ]);
     }
 }

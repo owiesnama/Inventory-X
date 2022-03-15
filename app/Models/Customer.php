@@ -9,5 +9,8 @@ use Laravel\Scout\Searchable;
 class Customer extends BaseModel
 {
     use HasFactory;
+   
+    protected $fillable = ['name','address','phone_number'];
+
 
 }

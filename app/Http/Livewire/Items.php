@@ -15,7 +15,6 @@ class Items extends Component
     public $editing;
     public $deleting;
     public $showModal;
-    public $showConfirmationModal;
 
     protected $rules = [
         'deleting' => 'sometimes',
@@ -51,13 +50,11 @@ class Items extends Component
     public function delete(Item $item)
     {
         $this->deleting = $item;
-        $this->showConfirmationModal = true;
     }
 
     public function destroy()
     {
         $this->deleting->delete();
-        $this->showConfirmationModal = true;
     }
 
     public function render()

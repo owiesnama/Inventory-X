@@ -15,7 +15,8 @@ class WarehouseItems extends Component
     public $isAddingNewItem = false;
     public $isUpdating = false;
     public $isDeleting = false;
-    public ItemsWarehouse $stock;
+    // public $ItemsWarehouse = $stock;
+    public $ItemsWarehouse;
     public $stockToDelete;
     public $perPage = 10;
     public $search = "";
