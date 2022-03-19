@@ -5,10 +5,10 @@ namespace App\Http\Livewire;
 use App\Models\Vendor;
 use Livewire\Component;
 
-class SearchVendor extends Component
+class SearchDropdown extends Component
 {
     public $query;
-    public $vendors = [];
+    public $record = [];
 
 
     public function mount()
@@ -19,13 +19,13 @@ class SearchVendor extends Component
     public function rest()
     {
         $this->query = '';
-        $this->vendors = [];
+        $this->record = [];
         $this->highlightIndex = 0;
     }
  
     public function incrementHighlight()
     {
-        if ($this->highlightIndex === count($this->vendors) - 1) {
+        if ($this->highlightIndex === count($this->record) - 1) {
             $this->highlightIndex = 0;
             return;
         }
@@ -35,30 +35,30 @@ class SearchVendor extends Component
     public function decrementHighlight()
     {
         if ($this->highlightIndex === 0) {
-            $this->highlightIndex = count($this->vendors) - 1;
+            $this->highlightIndex = count($this->record) - 1;
             return;
         }
         $this->highlightIndex--;
     }
  
-    public function selectContact()
+    public function selectRecord()
     {
-        $contact = $this->contacts[$this->highlightIndex] ?? null;
-        if ($contact) {
-            $this->redirect(route('show-contact', $vendor['id']));
-        }
+        $record = $this->record[$this->highlightIndex] ?? null;
+        // if ($record) {
+        //     $this->redirect(route('show-contact', $record['id']));
+        // }
     }
  
    
     public function updatedQuery()
     {
-        $this->vendors = Vendor::where('name', 'like', '%' . $this->query . '%')
+        $this->record = Vendor::where('name', 'like', '%' . $this->query . '%')
             ->get()
             ->toArray();
     }
     public function render()
     {
-        $vendor = Vendor::where('name', 'like' , '%', $this->query);
-        return view('livewire.search-vendor');
+        $record = Vendor::where('name', 'like' , '%', $this->query);
+        return view('livewire.search-dropdown');
     }
 }

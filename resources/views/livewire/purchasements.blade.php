@@ -90,7 +90,8 @@
                     <x-slot name="content">
                         <div>
                             <x-jet-validation-errors></x-jet-validation-errors>
-                            @livewire('search-vendor')
+                            <livewire:search-dropdown/>
+
                             {{-- <div class="mt-4 space-y-1">
                                 <x-jet-label for="vendor" value="{{ __('Vendor') }}" />
                                 <x-jet-input id="vendor" class="block w-full mt-1" type="text" inputmode="numeric"
