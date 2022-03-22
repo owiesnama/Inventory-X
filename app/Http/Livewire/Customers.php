@@ -3,92 +3,79 @@
 namespace App\Http\Livewire;
 
 use App\Models\Customer;
-
-use Illuminate\Support\Facades\Validator;
+use App\Http\Livewire\DataTable\WithPerPagePagination;
+use App\Http\Livewire\DataTable\WithSorting;
 use Livewire\Component;
-use Livewire\WithPagination;
 
 class Customers extends Component
 {
-    use WithPagination;
-    public $isAddingNewItem = false;
-    public $isDeleting = false;
-    public $isUpdating = false;
-    public $customer = [];
-    public $itemToDelete;
-    public $perPage = 10;
+    use WithPerPagePagination, WithSorting;
+    public $showModal = false;
+    public $customer;
+    public $deleting;
     public $search = "";
-    public $singleCustomer;
+    public $singleWarehouse;
 
 
+    protected $rules = [
+        'deleting' => 'sometimes',
+        'customer.name' => "required",
+        "customer.address" => "required",
+        "customer.phone_number" => "required",
 
-    public function store()
+    ];
+
+    public function save()
     {
-
-        $this->validate([
-            'customer.name' => "required",
-            "customer.address" => "required",
-            "customer.phone_number" => "required",
-        ]);
-
-        Customer::create($this->customer);
-
-        $this->isAddingNewItem = false;
-
+        $this->validate();
+        $this->customer->save();
+        $this->showModal = false;
         session()->flash('message', 'A new customer has been added');
     }
-    public function toggleAddingModal()
+
+
+    public function create()
     {
-        $this->isAddingNewItem = !$this->isAddingNewItem;
+        $this->customer = $this->makeBlankItem();
+        $this->showModal = true;
     }
-
-    public function update($id)
+    public function makeBlankItem()
     {
-        $this->isUpdating = !$this->isUpdating;
-
-        $customer = Customer::find($id);
-        $this->singleCustomer = $customer;
-        $this->customer = $customer->toArray();
-    }
-    public function edit()
-    {
-        $customer = Customer::find($this->singleCustomer)->first();
-        $customer->update([
-            'name' => $this->customer['name'],
-            'address' => $this->customer['address'],
-            'phone_number' => $this->customer['phone_number'],
-        ]);
-
-        $this->isUpdating = !$this->isUpdating;
-    }
-
-    public function toggleUpdaingModal()
-    {
-        $this->isUpdating = !$this->isUpdating;
+        return Customer::make(['name' => ""]);
     }
 
 
-    public function confirmingDeletion($item)
+    public function edit(Customer $customer)
     {
-        $this->isDeleting = true;
-        $this->itemToDelete = $item;
+        $this->customer = $customer;
+        $this->showModal = true;
     }
+
+    public function showModal()
+    {
+        $this->showModal = !$this->showModal;
+    }
+
+    public function delete(Customer $customer)
+    {
+        $this->deleting = $customer;
+    }
+
     public function destroy()
     {
-        Customer::find($this->itemToDelete['id'])->delete();
-        $this->isDeleting = false;
+        $this->deleting->delete();
+        $this->deleting = "";
     }
-
 
 
 
     public function render()
     {
 
-        
+
         return view('livewire.customers', [
-            'customers' => Customer::search($this->search)->paginate($this->perPage),
-           
+            'customers' => $this->applyPagination($this->applySorting(Customer::search($this->search))),
+
         ]);
     }
 }

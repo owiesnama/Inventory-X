@@ -18,7 +18,7 @@ class CreateItemsWarehousesTable extends Migration
         Schema::create('items_warehouses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('item_id')->constrained();
-            $table->foreignId('warehouse_id')->constrained();
+            $table->foreignId('warehouse_id')->constrained()->onDelete("cascade");
             $table->string('quantity');
             $table->timestamps();
         });

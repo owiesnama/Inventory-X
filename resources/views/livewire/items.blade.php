@@ -128,7 +128,6 @@
             </x-slot>
         </x-jet-dialog-modal>
     </form>
-    <!-- End Update modal form -->
-    {{-- Update Model Form End --}}
+
 
 </div>

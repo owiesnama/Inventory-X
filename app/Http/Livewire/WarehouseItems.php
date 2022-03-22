@@ -6,18 +6,21 @@ use App\Models\Item;
 use App\Models\Warehouse;
 use App\Models\ItemsWarehouse;
 use Livewire\Component;
-
+use App\Http\Livewire\DataTable\WithPerPagePagination;
+use App\Http\Livewire\DataTable\WithSorting;
 
 
 class WarehouseItems extends Component
 {
+
+    use WithPerPagePagination, WithSorting;
+
     public $warehouse;
     public $isAddingNewItem = false;
-    public $isUpdating = false;
     public $isDeleting = false;
-    public ItemsWarehouse $stock;
+    public $ItemsWarehouse;
     public $stockToDelete;
-    public $perPage = 10;
+   
     public $search = "";
 
     protected $rules = [
