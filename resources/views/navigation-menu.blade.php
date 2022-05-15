@@ -28,6 +28,10 @@
                         :active="request()->routeIs('purchasements')">
                         {{ __('Purchasements') }}
                     </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('sales') }}"
+                        :active="request()->routeIs('sales')">
+                        {{ __('Sale Invoices') }}
+                    </x-jet-nav-link>
                 </div>
 
 
@@ -185,6 +189,12 @@
                     :active="request()->routeIs('purchasements')">
                     {{ __('Purchasements') }}
                 </x-jet-responsive-nav-link>
+                
+                <x-jet-responsive-nav-link href="{{ route('sales') }}"
+                    :active="request()->routeIs('sales')">
+                    {{ __('Sales Invoices') }}
+                </x-jet-responsive-nav-link>
+
             </div>
 
             <!-- Responsive Settings Options -->
