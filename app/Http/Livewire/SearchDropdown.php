@@ -44,9 +44,6 @@ class SearchDropdown extends Component
     public function selectRecord()
     {
         $record = $this->record[$this->highlightIndex] ?? null;
-        // if ($record) {
-        //     $this->redirect(route('show-contact', $record['id']));
-        // }
     }
  
    

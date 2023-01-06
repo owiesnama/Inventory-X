@@ -14,6 +14,7 @@ class Purchasement extends BaseModel
         'items.name',
         'vendor.name'
     ];
+    
     protected $casts = [
         'items' => AsCollection::class
     ];

@@ -4,7 +4,7 @@
         <input
         type="text"
         class="form-input"
-        placeholder="Search Contacts..."
+        placeholder="Ve..."
         wire:model="query"
         wire:keydown.escape="reset"
         wire:keydown.tab="reset"
